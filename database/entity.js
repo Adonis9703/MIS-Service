@@ -140,6 +140,14 @@ let chatInfo = sequelize.define('chatinfo', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  doctorName: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  patientName: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   patientId: {
     type: Sequelize.STRING,
     allowNull: false
