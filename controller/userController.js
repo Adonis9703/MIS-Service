@@ -1,6 +1,29 @@
 const {user} = require('../database/entity')
 const jwt = require('jsonwebtoken')
 
+const getUserInfoById = async (ctx) => {
+  let token = ctx.request.header.token
+  let data = ctx.request.body
+  await jwt.verify(token, 'secret', async (err, decode) => {
+    console.log('验证token ===>', err, decode)
+    if (err) {
+      ctx.body = {
+        success: false,
+        message: '请登录后再操作',
+        data: null
+      }
+    } else {
+      await user.findById(data.userId).then(res => {
+        ctx.body = {
+          success: true,
+          message: '获取用户信息',
+          data: res.dataValues,
+        }
+      })
+    }
+  })
+}
+
 const getUserByType = async (ctx) => {
   let token = ctx.request.header.token
   let data = ctx.request.body
@@ -112,5 +135,6 @@ module.exports = {
   register,
   login,
   update,
-  getUserByType
+  getUserByType,
+  getUserInfoById
 }
