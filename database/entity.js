@@ -1,6 +1,13 @@
 const Sequelize = require('sequelize')
 const config = require('./config')
 
+/**
+ * Model索引
+ * 用户Model，药品Model，问诊信息Model，
+ * 聊天记录Model，处方Model，socket Model，常见疾病Model
+ * @type {Sequelize}
+ */
+
 let sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
   dialect: 'mysql',
@@ -278,11 +285,26 @@ let socketInfo = sequelize.define('socketinfo', {
   timestamps: false,
   freezeTableName: true
 })
+
+/**
+ * 常见疾病Model
+ * @type {Model}
+ */
+let diseases = sequelize.define('diseases', {
+  name: {
+    type: Sequelize.STRING,
+    primaryKey: true
+  }
+}, {
+  timestamps: false,
+  freezeTableName: true
+})
 module.exports = {
   user,
   medicine,
   chatInfo,
   msgHistory,
   rpInfo,
-  socketInfo
+  socketInfo,
+  diseases
 }

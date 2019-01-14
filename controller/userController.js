@@ -1,6 +1,35 @@
 const {user} = require('../database/entity')
 const jwt = require('jsonwebtoken')
 
+const getUserByType = async (ctx) => {
+  let token = ctx.request.header.token
+  let data = ctx.request.body
+  await jwt.verify(token, 'secret', async (err, decode) => {
+    console.log('验证token ===>', err, decode)
+    if (err) {
+      ctx.body = {
+        success: false,
+        message: '请登录后再操作',
+        data: null
+      }
+    } else {
+      await user.findAll({
+        where: {userType: data.userType}
+      }).then(res => {
+        let resTemp = []
+        res.forEach(item => {
+          resTemp.push(item.dataValues)
+        })
+        ctx.body = {
+          success: true,
+          message: '获取用户列表成功',
+          data: resTemp
+        }
+      })
+    }
+  })
+}
+
 const register = async (ctx) => {
   await user.create(ctx.request.body).then(res => {
     console.log('controller', res.dataValues)
@@ -81,5 +110,6 @@ const update = async (ctx) => {
 module.exports = {
   register,
   login,
-  update
+  update,
+  getUserByType
 }
