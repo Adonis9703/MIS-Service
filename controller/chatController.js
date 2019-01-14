@@ -27,6 +27,62 @@ const getDiseases = async (ctx) => {
   })
 }
 
+const createChat = async (ctx) => {
+  let token = ctx.request.header.token
+  let data = ctx.request.body
+  await jwt.verify(token, 'secret', async (err, decode) => {
+    console.log('验证token ===>', err, decode)
+    if (err) {
+      ctx.body = {
+        success: false,
+        message: '请登陆后再操作',
+        data: null
+      }
+    } else {
+      await chatInfo.create(data).then(res => {
+        console.log('chatController.js 新建问诊', res.dataValues)
+        ctx.body = {
+          success: true,
+          message: '新建问诊成功',
+          data: null
+        }
+      })
+    }
+  })
+}
+
+const getChatReqListByDocId = async (ctx) => {
+  let token = ctx.request.header.token
+  let data = ctx.request.body
+  await jwt.verify(token, 'secret', async (err, decode) => {
+    console.log('验证token ===>', err, decode)
+    if (err) {
+      ctx.body = {
+        success: false,
+        message: '请登陆后再操作',
+        data: null
+      }
+    } else {
+      await chatInfo.findAll({
+        where: {doctorId: data.doctorId}
+      }).then(res => {
+        console.log(res)
+        let resTemp = []
+        res.forEach(item => {
+          resTemp.push(item.dataValues)
+        })
+        ctx.body = {
+          success: true,
+          message: '获取问诊请求列表成功',
+          data: resTemp
+        }
+      })
+    }
+  })
+}
+
 module.exports = {
-  getDiseases
+  getDiseases,
+  createChat,
+  getChatReqListByDocId
 }
