@@ -16,7 +16,6 @@ const getMsgHistory = async (ctx) => {
       await msgHistory.findAll({
         where: {chatId: data.chatId}
       }).then(res => {
-        console.log(res)
         let resTemp = []
         res.forEach(item => {
           resTemp.push(item.dataValues)
@@ -31,6 +30,31 @@ const getMsgHistory = async (ctx) => {
   })
 }
 
+const addMsg = async (ctx) => {
+  let token = ctx.request.header.token
+  let data = ctx.request.body
+  await jwt.verify(token, 'secret', async (err, decode) => {
+    console.log('验证token ===>', err, decode)
+    if (err) {
+      ctx.body = {
+        success: false,
+        message: '请登陆后再操作',
+        data: null
+      }
+    } else {
+      await msgHistory.create(data).then(res => {
+        console.log(res.dataValues)
+        ctx.body = {
+          success: true,
+          message: '新增消息记录成功',
+          data: null
+        }
+      })
+    }
+  })
+}
+
 module.exports = {
-  getMsgHistory
+  getMsgHistory,
+  addMsg
 }

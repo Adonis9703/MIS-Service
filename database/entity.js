@@ -71,6 +71,10 @@ let user = sequelize.define('userinfo', {
   userType: {
     type: Sequelize.INTEGER(2),
     allowNull: true
+  },
+  socketId: {
+    type: Sequelize.STRING,
+    allowNull: true
   }
 }, {
   timestamps: false,

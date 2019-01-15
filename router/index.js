@@ -2,7 +2,7 @@ const router = require('koa-router')();
 const {register, login, update, getUserByType, getUserInfoById} = require('../controller/userController')
 const {getSocketByUserId} = require('../controller/socketController')
 const {getDiseases, createChat, getChatListByDocId, getChatListByPatientId, getChatInfoByChatId} = require('../controller/chatController')
-const {getMsgHistory} = require('../controller/messageController')
+const {getMsgHistory, addMsg} = require('../controller/messageController')
 router
   .post('/test', (ctx) => {
     ctx.body = 'success'
@@ -19,5 +19,6 @@ router
   .post('/getChatListByDocId', getChatListByDocId)  //医生端获取问诊列表
   .post('/getChatListByPatientId', getChatListByPatientId)  //患者端获取问诊列表
   .post('/getMsgHistory', getMsgHistory)  //获取服务器端聊天记录
+  .post('addMsg', addMsg)   //新增消息记录至数据库
 
 module.exports = router
