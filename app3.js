@@ -46,18 +46,6 @@ io.on('connection', (socket) => {
       msg: '这是来自服务器的消息'
     })
   })
-  // socket.on('register', async (data) => {
-  //   console.log('===> 用户注册，生成socket映射 <===')
-  //   let param = {
-  //     userId: data.userId,
-  //     socketId: socket.id
-  //   }
-  //   await socketInfo.create(param).then(res => {
-  //     console.log(res.dataValues)
-  //   }, err => {
-  //     console.log(err)
-  //   })
-  // })
   socket.on('refresh', async (data) => {
     console.log('===> 用户登录，更新socket映射 <===')
     let param = {
@@ -67,6 +55,16 @@ io.on('connection', (socket) => {
       where: {userId: data.userId}
     }).then(res => {
       console.log('===> socket 映射更新成功 <===')
+    })
+  })
+  socket.on('createChat', async data => {
+    await user.findById(data.doctorId).then(res => {
+      io.to(res.dataValues.socketId).emit('refreshChatList')
+    })
+  })
+  socket.on('admissions', async data => {
+    await user.findById(data.patientId).then(res => {
+      io.to(res.dataValues.socketId).emit('refreshChatStatus')
     })
   })
   socket.on('doc2service', async data => {
@@ -87,6 +85,7 @@ io.on('connection', (socket) => {
       })
     })
   })
+  //todo 用户发起请求后提示医生端刷新列表
   socket.on('disconnect', () => {
     console.log('客户端断开')
   })

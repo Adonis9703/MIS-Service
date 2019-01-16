@@ -103,10 +103,10 @@ const getChatListByDocId = async (ctx) => {
   })
 }
 
-const getChatListByPatientId  = async (ctx) => {
+const getChatListByPatientId = async (ctx) => {
   let token = ctx.request.header.token
   let data = ctx.request.body
-  await jwt.verify(token, 'secret', async (err, decode)=> {
+  await jwt.verify(token, 'secret', async (err, decode) => {
     console.log('验证token ===>', err, decode)
     if (err) {
       ctx.body = {
@@ -132,10 +132,39 @@ const getChatListByPatientId  = async (ctx) => {
   })
 }
 
+const updateChat = async (ctx) => {
+  let token = ctx.request.header.token
+  let data = ctx.request.body
+  await jwt.verify(token, 'secret', async (err, decode) => {
+    console.log('验证token ===>', err, decode)
+    if (err) {
+      ctx.body = {
+        success: false,
+        message: '请登录后再操作',
+        data: null
+      }
+    } else {
+      await chatInfo.update(data, {
+        where: {chatId: data.chatId}
+      }).then(async res => {
+        console.log('===> 更新问诊信息 <===')
+        await chatInfo.findById(data.chatId).then(res => {
+          ctx.body = {
+            success: true,
+            message: '修改成功',
+            data: res.dataValues
+          }
+        })
+      })
+    }
+  })
+}
+
 module.exports = {
   getDiseases,
   createChat,
   getChatListByDocId,
   getChatListByPatientId,
-  getChatInfoByChatId
+  getChatInfoByChatId,
+  updateChat
 }
