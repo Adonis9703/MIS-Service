@@ -46,6 +46,7 @@ io.on('connection', (socket) => {
       msg: '这是来自服务器的消息'
     })
   })
+    //刷新用户socket
   socket.on('refresh', async (data) => {
     console.log('===> 用户登录，更新socket映射 <===')
     let param = {
@@ -57,16 +58,19 @@ io.on('connection', (socket) => {
       console.log('===> socket 映射更新成功 <===')
     })
   })
+    //患者端发起请求 服务器向医生端发起刷新问诊列表请求
   socket.on('createChat', async data => {
     await user.findById(data.doctorId).then(res => {
       io.to(res.dataValues.socketId).emit('refreshChatList')
     })
   })
+    //医生端接诊后 让患者端刷新问诊状态
   socket.on('admissions', async data => {
     await user.findById(data.patientId).then(res => {
       io.to(res.dataValues.socketId).emit('refreshChatStatus')
     })
   })
+    //医生端发消息给服务器 服务器转发至患者端 并保存聊天记录
   socket.on('doc2service', async data => {
     await user.findById(data.receiverId).then(async res => {
       let patientSocketId = res.dataValues.socketId
@@ -76,12 +80,14 @@ io.on('connection', (socket) => {
       })
     })
   })
+    //患者端发消息给服务器 服务器转发至医生端 并保存聊天记录
   socket.on('pat2service', async data => {
     await user.findById(data.receiverId).then(async res => {
       let doctorSocketId = res.dataValues.socketId
       await msgHistory.create(data).then(res => {
         io.to(doctorSocketId).emit('service2doc', data)
         io.to(socket.id).emit('historySaved', {success: true})
+          console.log('患者端消息转发至医生端')
       })
     })
   })
