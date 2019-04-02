@@ -1,5 +1,7 @@
 const {medicine} = require('../database/entity')
 const jwt = require('jsonwebtoken')
+const Sq = require('sequelize')
+const Op = Sq.Op
 
 const getMedInfoById = async (ctx) => {
   let token = ctx.request.headers.token
@@ -36,7 +38,9 @@ const getMedInfoList = async (ctx) => {
         data: null
       }
     } else {
-      await medicine.findAll().then(res => {
+      await medicine.findAll({
+        where: {name: {$like: `%${data.name}%`}}
+      }).then(res => {
         let resTemp = []
         res.forEach(item => {
           resTemp.push(item.dataValues)
@@ -96,7 +100,7 @@ const addMedInfo = async (ctx) => {
         ctx.body = {
           success: true,
           message: '新增药品成功',
-          data:  null
+          data: null
         }
       })
     }
