@@ -1,7 +1,7 @@
 let config = {
   database: 'mis',
   username: 'root',
-  password: '123456', //笔记本 mysqlpassword.
+  password: '123456',
   host: 'localhost',
   port: 3306
 }

@@ -55,7 +55,6 @@ const getUserByType = async (ctx) => {
 
 const register = async (ctx) => {
   await user.create(ctx.request.body).then(res => {
-    console.log('controller', res.dataValues)
     ctx.body = {
       success: true,
       message: '注册成功',
@@ -123,7 +122,7 @@ const update = async (ctx) => {
         console.log(res)
         ctx.body = {
           success: true,
-          message: `修改成功`,
+          message: '修改成功',
           data: null
         }
       })
