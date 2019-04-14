@@ -131,6 +131,10 @@ let medicine = sequelize.define('medicine', {
   timeState: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  isDelete: {
+    type: Sequelize.BOOLEAN,
+    allowNull: true
   }
 }, {
   timestamps: false,

@@ -91,7 +91,6 @@ io.on('connection', (socket) => {
       })
     })
   })
-  //todo 用户发起请求后提示医生端刷新列表
   socket.on('disconnect', () => {
     console.log('客户端断开')
   })

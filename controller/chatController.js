@@ -87,7 +87,9 @@ const getChatListByDocId = async (ctx) => {
       }
     } else {
       await chatInfo.findAll({
-        where: {doctorId: data.doctorId}
+        where: {
+          doctorId: data.doctorId,
+        }
       }).then(res => {
         let resTemp = []
         res.forEach(item => {

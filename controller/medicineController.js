@@ -1,7 +1,6 @@
 const {medicine} = require('../database/entity')
 const jwt = require('jsonwebtoken')
 const Sq = require('sequelize')
-const Op = Sq.Op
 
 const getMedInfoById = async (ctx) => {
   let token = ctx.request.headers.token
@@ -38,13 +37,22 @@ const getMedInfoList = async (ctx) => {
         data: null
       }
     } else {
-      await medicine.findAll({
-        where: {name: {$like: `%${data.name}%`}}
+      await medicine.findAndCountAll({
+        where: {
+          name: {$like: `%${data.name}%`},
+          $and: {isDelete: false}
+          },
+        limit: data.pageSize,
+        offset: (data.pageSize * (data.pageNo - 1))
       }).then(res => {
-        let resTemp = []
-        res.forEach(item => {
-          resTemp.push(item.dataValues)
+        let temp = []
+        res.rows.forEach(item => {
+          temp.push(item.dataValues)
         })
+        let resTemp = {
+          list: temp,
+          total: res.count
+        }
         ctx.body = {
           success: true,
           message: '获取药品列表',
@@ -82,8 +90,6 @@ const updateMedInfo = async (ctx) => {
   })
 }
 
-
-//todo 分页
 const addMedInfo = async (ctx) => {
   let token = ctx.request.headers.token
   let data = ctx.request.body
