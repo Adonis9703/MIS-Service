@@ -40,7 +40,10 @@ const getUserByType = async (ctx) => {
       }
     } else {
       await user.findAll({
-        where: {userType: data.userType},
+        where: {
+          userType: data.userType,
+          $and: {isOnline: data.isOnline}
+        },
         attributes: {exclude: ['password']}
       }).then(res => {
         let resTemp = []
@@ -75,7 +78,6 @@ const register = async (ctx) => {
 }
 
 //todo 判断登陆用户类型是否正确，医生只能通过医生端登陆，患者只能通过患者端登陆
-//todo 用户在线状态
 const login = async (ctx) => {
   await user.findById(ctx.request.body.userId).then(res => {
     console.log('===> 用户请求登录登陆 <===')

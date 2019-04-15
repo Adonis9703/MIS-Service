@@ -75,7 +75,11 @@ let user = sequelize.define('userinfo', {
   socketId: {
     type: Sequelize.STRING,
     allowNull: true
-  }
+  },
+  isOnline: {
+    type: Sequelize.BOOLEAN,
+    allowNull: true
+  },
 }, {
   timestamps: false,
   freezeTableName: true
