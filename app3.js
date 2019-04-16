@@ -3,6 +3,7 @@ const router = require('./router/index');
 const bodyParser = require('koa-bodyparser');
 const cros = require('koa2-cors');
 const jwtKoa = require('koa-jwt')
+const file = require('koa-static')
 
 const app = new Koa();
 const http = require('http').createServer(app.callback());
@@ -16,6 +17,7 @@ http.listen(3000);
 app.use(cros({credentials: true}));
 app.use(bodyParser())
 app.use(router.routes()).use(router.allowedMethods());
+app.use(file(__dirname+ '/uploads'))
 
 app.use((ctx, next) => {
   return next().catch((err) => {

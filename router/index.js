@@ -2,8 +2,10 @@ const router = require('koa-router')();
 const {register, login, update, getUserByType, getUserInfoById} = require('../controller/userController')
 const {getSocketByUserId} = require('../controller/socketController')
 const {getDiseases, createChat, getChatListByDocId, updateChat, getChatListByPatientId, getChatInfoByChatId} = require('../controller/chatController')
-const {getMsgHistory, addMsg} = require('../controller/messageController')
+const {getMsgHistory, addMsg, uploadImg} = require('../controller/messageController')
 const {addMedInfo, updateMedInfo, getMedInfoById, getMedInfoList} = require('../controller/medicineController')
+const {upload} = require('../database/file')
+
 router
   .post('/test', (ctx) => {
     ctx.body = 'success'
@@ -25,5 +27,6 @@ router
   .post('/updateMedInfo', updateMedInfo)  //更新药品信息
   .post('/getMedInfoById', getMedInfoById)  //通过药品id获取药品信息
   .post('/getMedInfoList', getMedInfoList)  //获取药品库列表
+  .post('/uploadImg', upload.single('file'), uploadImg)
 
 module.exports = router
