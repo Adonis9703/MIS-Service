@@ -167,6 +167,26 @@ let chatInfo = sequelize.define('chatinfo', {
     type: Sequelize.STRING,
     allowNull: true
   },
+  patientSex: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  patientAge: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  patientBloodType: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  patientAllergy: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  patientOther: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   patientId: {
     type: Sequelize.STRING,
     allowNull: false

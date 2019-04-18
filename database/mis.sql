@@ -11,7 +11,7 @@
  Target Server Version : 80013
  File Encoding         : 65001
 
- Date: 15/01/2019 17:35:34
+ Date: 18/04/2019 10:31:36
 */
 
 SET NAMES utf8mb4;
@@ -33,14 +33,13 @@ CREATE TABLE `chatinfo`  (
   `complainImgs` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '主诉图片',
   `doctorName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '医生姓名',
   `patientName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '患者姓名',
+  `patientSex` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '患者性别',
+  `patientBloodType` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '患者血型',
+  `patientAllergy` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '患者过敏信息',
+  `patientOther` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '患者备注',
+  `patientAge` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '患者年龄',
   PRIMARY KEY (`chatId`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of chatinfo
--- ----------------------------
-INSERT INTO `chatinfo` VALUES ('2019011414323601163456', '123456', '5150510116', 0, '吃吃吃吃从从从从', NULL, '2019-01-14', NULL, NULL, '测试医生', '余思远');
-INSERT INTO `chatinfo` VALUES ('2019011517205601160001', '10000001', '5150510116', 0, '测试22222222', NULL, '2019-01-15', NULL, NULL, '测试医生2', '余思远');
 
 -- ----------------------------
 -- Table structure for diseases
@@ -79,14 +78,16 @@ CREATE TABLE `medicine`  (
   `dosageUnit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `timeState` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `isDelete` tinyint(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of medicine
 -- ----------------------------
-INSERT INTO `medicine` VALUES (1, '测试药品', 20, '盒', 12, '2018-12-25-4 11:35', '测试医师', '30', '毫克', '口服', '一天三次');
-INSERT INTO `medicine` VALUES (2, '记忆面包', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `medicine` VALUES (1, '测试药品', 20, '盒', 12, '2019/4/15 上午10:19:02', '测试医生', '30', '毫克', '口服', '一天三次', 1);
+INSERT INTO `medicine` VALUES (2, '记忆面包', NULL, NULL, NULL, '2019/4/15 上午10:18:59', '测试医生', NULL, NULL, NULL, NULL, 1);
+INSERT INTO `medicine` VALUES (3, '感冒灵胶囊 20粒/盒', 10, '盒', 30, '2019/4/15 上午10:47:52', '测试医生', NULL, NULL, NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for msghistory
@@ -102,15 +103,7 @@ CREATE TABLE `msghistory`  (
   `receiverId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '接收者id',
   `id` int(255) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of msghistory
--- ----------------------------
-INSERT INTO `msghistory` VALUES ('2019011414323601163456', '在吗在吗医生在吗', 0, '17:12', NULL, '5150510116', '123456', 76);
-INSERT INTO `msghistory` VALUES ('2019011414323601163456', '你好，在的，你有病吗', 1, '17:12', NULL, '123456', '5150510116', 77);
-INSERT INTO `msghistory` VALUES ('2019011517205601160001', '艾丹撒啊 啊锁定', 0, '17:21', NULL, '5150510116', '10000001', 78);
-INSERT INTO `msghistory` VALUES ('2019011517205601160001', '你好啊 啊 实打', 1, '17:22', NULL, '10000001', '5150510116', 79);
+) ENGINE = InnoDB AUTO_INCREMENT = 93 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for rpinfo
@@ -165,14 +158,15 @@ CREATE TABLE `userinfo`  (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户密码',
   `userType` int(2) NULL DEFAULT NULL COMMENT '用户类型 0患者 1医生',
   `socketId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'socket id',
+  `isOnline` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT '是否在线',
   PRIMARY KEY (`userId`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of userinfo
 -- ----------------------------
-INSERT INTO `userinfo` VALUES ('10000001', '测试医生2', '男', '13207478523', '', NULL, NULL, NULL, '护士', '全科', '123456', 1, '3GlzVU3rDZAdzuOfAAAG');
-INSERT INTO `userinfo` VALUES ('123456', '测试医生', '男', '15869106432', NULL, NULL, NULL, NULL, '医师', '全科', '123456', 1, '3GlzVU3rDZAdzuOfAAAG');
-INSERT INTO `userinfo` VALUES ('5150510116', '余思远', '男', '15869106432', 'A', '傻子过敏', '备注备注备注', 21, 'null', 'null', '123456', 0, 'xdN_66gsdZNlkeC3AAAI');
+INSERT INTO `userinfo` VALUES ('10000001', '测试医生2', '男', '13207478523', '', NULL, NULL, NULL, '护士', '全科', '123456', 1, '3GlzVU3rDZAdzuOfAAAG', 0);
+INSERT INTO `userinfo` VALUES ('123456', '测试医生', '男', '15869106432', NULL, NULL, NULL, NULL, '医师', '全科', '123456', 1, 'Y8WeGJHGNOZIET4pAAAJ', 1);
+INSERT INTO `userinfo` VALUES ('5150510116', '余思远', '男', '15869106432', 'A', '傻子过敏', '备注备注备注', 21, 'null', 'null', '123456', 0, 'NyC2KKrVsAqNvgUHAAAI', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
