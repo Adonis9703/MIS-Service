@@ -214,6 +214,10 @@ let chatInfo = sequelize.define('chatinfo', {
   complainImgs: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  refuseReason: {
+    type: Sequelize.STRING,
+    allowNull: true
   }
 }, {
   timestamps: false,

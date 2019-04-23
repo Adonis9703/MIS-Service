@@ -2,7 +2,7 @@ let config = {
   database: 'mis',
   username: 'root',
   password: '123456',
-  host: 'localhost',
+  host: '47.101.185.46',
   port: 3306
 }
 
