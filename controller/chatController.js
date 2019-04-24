@@ -118,7 +118,10 @@ const getChatListByPatientId = async (ctx) => {
       }
     } else {
       await chatInfo.findAll({
-        where: {patientId: data.patientId}
+        where: {
+          patientId: data.patientId,
+          chatStatus: {$like: `%${data.chatStatus}%`}
+        }
       }).then(res => {
         let resTemp = []
         res.forEach(item => {
