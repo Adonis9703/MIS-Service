@@ -4,6 +4,7 @@ const {getSocketByUserId} = require('../controller/socketController')
 const {getDiseases, createChat, getChatListByDocId, updateChat, getChatListByPatientId, getChatInfoByChatId} = require('../controller/chatController')
 const {getMsgHistory, addMsg, uploadImg} = require('../controller/messageController')
 const {addMedInfo, updateMedInfo, getMedInfoById, getMedInfoList} = require('../controller/medicineController')
+const {getRpByChatId, createRp} = require('../controller/rpController')
 const {upload} = require('../database/file')
 
 router
@@ -27,6 +28,8 @@ router
   .post('/updateMedInfo', updateMedInfo)  //更新药品信息
   .post('/getMedInfoById', getMedInfoById)  //通过药品id获取药品信息
   .post('/getMedInfoList', getMedInfoList)  //获取药品库列表
-  .post('/uploadImg', upload.single('file'), uploadImg)
+  .post('/uploadImg', upload.single('file'), uploadImg)   //上传图片
+  .post('/createRp', createRp)  //新建处方单
+  .post('/getRpByChatId', getRpByChatId)  //通过问诊id获取处方
 
 module.exports = router
