@@ -259,6 +259,10 @@ let msgHistory = sequelize.define('msghistory', {
     type: Sequelize.STRING,
     allowNull: true
   },
+  msgRadio: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   msgTime: {
     type: Sequelize.STRING,
     allowNull: true

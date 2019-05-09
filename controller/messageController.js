@@ -54,7 +54,7 @@ const addMsg = async (ctx) => {
   })
 }
 
-const uploadImg = (ctx) => {
+const uploadFile = (ctx) => {
   let data = ctx.req.body
   ctx.body = {
     success: true,
@@ -69,5 +69,5 @@ const uploadImg = (ctx) => {
 module.exports = {
   getMsgHistory,
   addMsg,
-  uploadImg
+  uploadFile
 }
