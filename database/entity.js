@@ -301,6 +301,10 @@ let rpInfo = sequelize.define('rpinfo', {
   otherPrice: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  diagnosis: {
+    type: Sequelize.STRING,
+    allowNull: true
   }
 }, {
   timestamps: false,
