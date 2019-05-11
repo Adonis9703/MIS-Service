@@ -17,7 +17,7 @@ http.listen(3000);
 app.use(cros({credentials: true}));
 app.use(bodyParser())
 app.use(router.routes()).use(router.allowedMethods());
-app.use(file(__dirname+ '/uploads'))
+app.use(file(__dirname + '/uploads'))
 
 app.use((ctx, next) => {
   return next().catch((err) => {
@@ -70,6 +70,18 @@ io.on('connection', (socket) => {
   socket.on('admissions', async data => {
     await user.findById(data.patientId).then(res => {
       io.to(res.dataValues.socketId).emit('refreshChatStatus')
+    })
+  })
+  //医生端结束问诊 患者端实时刷新
+  socket.on('end', async data => {
+    await user.findById(data.patientId).then(res => {
+      io.to(res.dataValues.socketId).emit('endChat')
+    })
+  })
+  //医生端开具处方 患者端实时刷新
+  socket.on('rp', async data => {
+    await user.findById(data.patientId).then(res => {
+      io.to(res.dataValues.socketId).emit('getRp')
     })
   })
   //医生端发消息给服务器 服务器转发至患者端 并保存聊天记录
