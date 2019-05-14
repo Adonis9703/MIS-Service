@@ -87,11 +87,19 @@ const login = async (ctx) => {
         userName: res.dataValues.name
       }, 'secret', {expiresIn: '168h'})
       console.log('用户登录成功, 生成Token:', token)
-      ctx.body = {
-        success: true,
-        message: '用户登录成功',
-        data: res.dataValues,
-        token: token
+      if (ctx.request.body.type !== res.dataValues.userType) {
+        ctx.body = {
+          success: true,
+          message: '用户登录成功',
+          data: res.dataValues,
+          token: token
+        }
+      } else {
+        ctx.body = {
+          success: false,
+          message: '用户类型错误',
+          data: null
+        }
       }
     } else {
       console.log('用户登录失败')
