@@ -97,7 +97,7 @@ const login = async (ctx) => {
       } else {
         ctx.body = {
           success: false,
-          message: '用户类型错误',
+          message: '用户角色不符',
           data: null
         }
       }
