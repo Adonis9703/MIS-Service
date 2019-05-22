@@ -86,7 +86,7 @@ const login = async (ctx) => {
         userName: res.dataValues.name
       }, 'secret', {expiresIn: '168h'})
       console.log('用户登录成功, 生成Token:', token)
-      if (res.dataValues.userType == 3 && ctx.request.body.type == 1) {
+      if (res.dataValues.userType == 2 && ctx.request.body.type == 1) {
         ctx.body = {
           success: true,
           message: '管理员登录成功',
