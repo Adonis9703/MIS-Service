@@ -1,5 +1,5 @@
 const router = require('koa-router')();
-const {register, login, update, getUserByType, getUserInfoById} = require('../controller/userController')
+const {register, login, update, getUserByType, getUserInfoById, getDoctorList} = require('../controller/userController')
 const {getSocketByUserId} = require('../controller/socketController')
 const {getDiseases, createChat, getChatListByDocId, updateChat, getChatListByPatientId, getChatInfoByChatId} = require('../controller/chatController')
 const {getMsgHistory, addMsg, uploadFile} = require('../controller/messageController')
@@ -31,5 +31,5 @@ router
   .post('/uploadFile', upload.single('file'), uploadFile)   //上传图片
   .post('/createRp', createRp)  //新建处方单
   .post('/getRpByChatId', getRpByChatId)  //通过问诊id获取处方
-
+  .post('/getDoctorList', getDoctorList)  //获取医生列表
 module.exports = router

@@ -27,6 +27,43 @@ const getUserInfoById = async (ctx) => {
   })
 }
 
+const getDoctorList = async (ctx) => {
+  let token = ctx.request.headers.token
+  let data = ctx.request.body
+  await jwt.verify(token, 'secret', async (err, decode) => {
+    if (err) {
+      ctx.body = {
+        success: false,
+        message: '请登录后再操作',
+        data: null
+      }
+    } else {
+      await user.findAndCountAll({
+        where: {
+          name: {$like: `%${data.name}%`},
+          $and: {userType: 1}
+        },
+        limit: data.pageSize,
+        offset: (data.pageSize * (data.pageNo - 1))
+      }).then(res => {
+        let temp = []
+        res.rows.forEach(item => {
+          temp.push(item.dataValues)
+        })
+        let resTemp = {
+          list: temp,
+          total: res.count
+        }
+        ctx.body = {
+          success: true,
+          message: '获取医生列表',
+          data: resTemp
+        }
+      })
+    }
+  })
+}
+
 const getUserByType = async (ctx) => {
   let token = ctx.request.header.token
   let data = ctx.request.body
@@ -42,7 +79,8 @@ const getUserByType = async (ctx) => {
       await user.findAll({
         where: {
           userType: data.userType,
-          $and: {isOnline: data.isOnline}
+          $and: {isOnline: data.isOnline},
+          name: {$like: `%${data.name}%`}
         },
         attributes: {exclude: ['password']}
       }).then(res => {
@@ -129,15 +167,15 @@ const update = async (ctx) => {
         message: '请登录后再操作',
         data: null
       }
-    } else if (decode.userId !== data.userId) {
+    } else if (data.userType==0 && decode.userId !== data.userId) {
       ctx.body = {
         success: false,
-        message: '学号不允许更改哦',
+        message: '账号不允许更改哦',
         data: null
       }
     } else {
       await user.update(data, {
-        where: {userId: data.userId}
+        where: {userId: data.oldId}
       }).then(res => {
         console.log('===> 用户更新信息 <===')
         console.log(res)
@@ -156,5 +194,6 @@ module.exports = {
   login,
   update,
   getUserByType,
-  getUserInfoById
+  getUserInfoById,
+  getDoctorList
 }
