@@ -77,7 +77,6 @@ const register = async (ctx) => {
   })
 }
 
-//todo 判断登陆用户类型是否正确，医生只能通过医生端登陆，患者只能通过患者端登陆
 const login = async (ctx) => {
   await user.findById(ctx.request.body.userId).then(res => {
     console.log('===> 用户请求登录登陆 <===')
@@ -87,7 +86,14 @@ const login = async (ctx) => {
         userName: res.dataValues.name
       }, 'secret', {expiresIn: '168h'})
       console.log('用户登录成功, 生成Token:', token)
-      if (ctx.request.body.type == res.dataValues.userType) {
+      if (res.dataValues.userType == 3 && crx.request.body.type == 1) {
+        ctx.body = {
+          success: true,
+          message: '管理员登录成功',
+          data: res.dataValues,
+          token: token
+        }
+      } else if (ctx.request.body.type == res.dataValues.userType) {
         ctx.body = {
           success: true,
           message: '用户登录成功',
